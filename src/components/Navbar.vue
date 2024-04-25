@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import Menubar from 'primevue/menubar';
+// import Logo from '../assets/img/logo2.png';
+import Logo from '../assets/img/logoEB.png';
 
 import Button from 'primevue/button';
 
@@ -18,6 +20,13 @@ const items = ref([
         url: 'https://sistema.extraboletas.com/perfil.html?tab_seleccionado=mis-compras'
 
     },
+    {
+        label: 'Registrase',
+        icon: 'pi pi-pen-to-square',
+        id: 'btnregister',
+        url: 'https://sistema.extraboletas.com/perfil.html?tab_seleccionado=mis-compras'
+
+    },
 
 
 ]);
@@ -27,7 +36,7 @@ const items = ref([
     <div class="card">
         <Menubar :model="items" class="centered-menu">
             <template #start>
-                <img src="../assets/logo.png" alt="Extraboletas" width="250px">
+                <img :src="Logo" alt="Extraboletas" width="250px">
             </template>
             <template #item="{ item, props, hasSubmenu, root }">
                 <a v-ripple class="flex align-items " v-bind="props.action" :href="item.url">
