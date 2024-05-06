@@ -31,31 +31,16 @@
 <script setup>
 import Button from 'primevue/button';
 import Galleria from 'primevue/galleria';
-import { ref, onMounted } from "vue";
-import banner from '../assets/img/banner5.jpg'
-import banner2 from '../assets/img/banner3.png'
+import { ref, onMounted, defineProps } from "vue";
 
-const photos = [
-    {
-        itemImageSrc: banner,
-        alt: 'Description for Image 1',
-        name: 'CONGRESO GENERAL EXPOCAMELLO 2024',
-        title: '19 de Julio - Expofuturo, Pereira ',
-        caption: true,
-        url: 'https://sistema.extraboletas.com/?ev=69vsgaoyh7xr6fd4c1lmji088twyvz'
-    },
-    {
-        itemImageSrc: banner2,
-        alt: 'Description for Image 1',
-        title: '24 de abril al 3 de mayo - Pereira',
-        name: 'TRIPLETA AURIROJA',
+const props = defineProps({
+    eventos: {
+        type: Array,
+        required: true
+    }
+});
 
-        caption: true,
-        url: 'https://sistema.extraboletas.com/?ev=zu3rf6vpd72rlb5isq8n4nyya59cet&pven=1'
-    },
-];
-
-const images = ref(photos);
+const images = ref([]);
 const responsiveOptions = ref([
     {
         breakpoint: '1300px',
@@ -66,4 +51,23 @@ const responsiveOptions = ref([
         numVisible: 1
     }
 ]);
+const formatearFecha = (fecha) => {
+    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const fechaEvento = new Date(fecha);
+    const dia = fechaEvento.getDate();
+    const mesIndex = fechaEvento.getMonth();
+    const mes = meses[mesIndex];
+    return `${dia} de ${mes}`;
+};
+onMounted(() => {
+    const photos = props.eventos.map(evento => ({
+        itemImageSrc: 'http://localhost:3000/uploads/' + evento.img_banner,
+        alt: evento.nombre_evento,
+        name: evento.nombre_evento,
+        title: formatearFecha(evento.fecha_evento) + ' - ' + evento.ubicacion,
+        caption: true,
+        url: 'http://localhost:5173/detalle-evento/' + evento.id
+    }));
+    images.value = photos;
+});
 </script>

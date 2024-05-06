@@ -9,7 +9,13 @@ html,body{
     margin: 0px;
     height: 100% !important;
 }
+.bg-extraboleta{
+    background-color: #1D70B7;
+}
 
+.subtitulos{
+    border-radius:10px 10px;
+}
 .st0 {
     fill: #1D70B7;
 }

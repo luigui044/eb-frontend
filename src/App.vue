@@ -1,23 +1,41 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { watch, ref, watchEffect, onMounted } from 'vue'
+import axios from 'axios';
+
 import Navbar from './components/Navbar.vue'
 import Sidebar from './components/Sidebar.vue'
 import Galeria from './components/Galeria.vue'
 import Button from 'primevue/button'
 import Footer from '@/components/Footer.vue'
+import HomeViewVue from './views/HomeView.vue';
+const route = useRoute();
+const mostrarComponente = ref(false);
+watchEffect(() => {
+  mostrarComponente.value = debeMostrarComponente(route.path);
+});
+function debeMostrarComponente(ruta) {
+  return ruta.startsWith("/admin");
+}
 
-
-
-
+const eventosAMostrar = ref([]);
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/eventos/listar-eventos');
+    eventosAMostrar.value = response.data;
+  } catch (error) {
+    console.error('Error al obtener los eventos:', error);
+  }
+});
 
 </script>
 
 <template>
-  <Sidebar />
+  <Sidebar v-if="!mostrarComponente" />
   <header>
 
-    <Navbar />
-    <Galeria v-if="$route.name === 'home'" />
+    <Navbar v-if="!mostrarComponente" />
+    <Galeria v-if="$route.name === 'home' && eventosAMostrar.length" :eventos="eventosAMostrar" />
     <div class="w-100 text-center row">
       <div class="col-12 ">
         <a href="https://sistema.extraboletas.com/perfil.html?tab_seleccionado=mis-compras"
@@ -49,10 +67,13 @@ import Footer from '@/components/Footer.vue'
 
   </header>
 
-  <RouterView />
+  <RouterView :eventos="eventosAMostrar" />
 
 
-  <Footer />
+
+
+  <Footer v-if="!mostrarComponente">
+  </Footer>
 </template>
 
 <style scoped>

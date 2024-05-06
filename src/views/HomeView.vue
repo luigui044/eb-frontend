@@ -2,7 +2,24 @@
 import Carousel from "../components/Carousel.vue";
 import 'https://static.elfsight.com/platform/platform.js';
 import Button from 'primevue/button';
-import Sidebar from '../components/Sidebar.vue'
+import axios from 'axios';
+
+import { ref, onMounted } from 'vue'
+
+const eventos = ref([])
+
+
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/eventos/listar-eventos');
+    eventos.value = response.data;
+    // console.log(eventos.value.id)
+  } catch (error) {
+    console.error('Error al obtener los eventos:', error);
+  }
+});
+
 
 </script>
 
@@ -11,7 +28,7 @@ import Sidebar from '../components/Sidebar.vue'
 
     <div class="grid  justify-content-center" style=" text-align: -moz-center;    text-align: -webkit-center;">
       <div class="col-12 lg:col-10 ">
-        <Carousel />
+        <Carousel v-if="eventos.length" :eventos="eventos" />
       </div>
     </div>
 

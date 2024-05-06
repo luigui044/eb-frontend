@@ -5,7 +5,7 @@ import imgLogo from '../assets/img/logoEB.png'
 <template>
     <footer class="px-2">
         <div class="grid  " style="padding: 10px 15px 0 15px;">
-            <d iv class="col-12" style="border-bottom: 1px  solid white; ">
+            <div class="col-12" style="border-bottom: 1px  solid white; ">
                 <!-- Facebook -->
                 <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1 text-white shadow-blanco"
                     href="https://www.facebook.com/ExtraBoletas" role="button"><i
@@ -25,7 +25,7 @@ import imgLogo from '../assets/img/logoEB.png'
                 <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1 text-white shadow-blanco"
                     href="https://api.whatsapp.com/send?phone=573105208930&text=hola%20buena%20tarde%20estoy%20interesado%20en%20comprar%20una%20boleta"
                     role="button"><i class="pi pi-whatsapp font-icon-social mx-2"></i></a>
-            </d>
+            </div>
 
 
 

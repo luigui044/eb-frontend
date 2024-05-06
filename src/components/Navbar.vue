@@ -3,8 +3,8 @@ import { ref } from "vue";
 import Menubar from 'primevue/menubar';
 // import Logo from '../assets/img/logo2.png';
 import Logo from '../assets/img/logoEB.png';
+import Badge from 'primevue/badge';
 
-import Button from 'primevue/button';
 
 const items = ref([
     {

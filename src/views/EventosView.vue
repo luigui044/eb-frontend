@@ -19,8 +19,22 @@ import img14 from '../assets/Pasados/14.jpg'
 import img15 from '../assets/Pasados/15.jpg'
 import prox1 from '../assets/img/evento2.jpeg'
 import prox2 from '../assets/img/evento3.jpg'
+import axios from 'axios';
 
-import { ref } from "vue";
+import { ref, onMounted } from 'vue'
+
+const eventos = ref([])
+onMounted(async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/eventos/listar-eventos');
+        eventos.value = response.data;
+        // console.log(eventos.value.id)
+    } catch (error) {
+        console.error('Error al obtener los eventos:', error);
+    }
+});
+
+
 const proxiEvents = [{
     src: prox1
 },
@@ -86,9 +100,9 @@ const eventosProx = ref(proxiEvents)
         </div>
         <div class="col-7 md:col-8 lg:col-9">
             <div class="grid justify-content-center mb-5 px-5">
-                <template v-for="image2 in eventosProx">
+                <template v-for="evento in eventos">
                     <div class="col-12 lg:col-3">
-                        <img :src="image2.src" alt="" width="100%">
+                        <img :src="'http://localhost:3000/uploads/' + evento.img_portrait" alt="" width="100%">
                     </div>
                 </template>
 
