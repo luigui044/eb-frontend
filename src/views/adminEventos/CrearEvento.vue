@@ -61,6 +61,7 @@ import FileUpload from 'primevue/fileupload';
 import axios from 'axios';
 import Dropdown from 'primevue/dropdown';
 import { ref } from 'vue';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const token = localStorage.getItem('token');
 const date = ref();
@@ -116,7 +117,7 @@ const crearEvento = async () => {
     if (verticalFile) formData.append('img_vertical', verticalFile);
 
     try {
-        const response = await axios.post('http://localhost:3000/eventos/crear-evento', formData, {
+        const response = await axios.post(`${baseUrl}eventos/crear-evento`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`,

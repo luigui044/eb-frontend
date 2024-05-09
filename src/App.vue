@@ -1,14 +1,14 @@
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { watch, ref, watchEffect, onMounted } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import { ref, watchEffect, onMounted } from 'vue'
 import axios from 'axios';
-
 import Navbar from './components/Navbar.vue'
 import Sidebar from './components/Sidebar.vue'
 import Galeria from './components/Galeria.vue'
 import Button from 'primevue/button'
 import Footer from '@/components/Footer.vue'
-import HomeViewVue from './views/HomeView.vue';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 const route = useRoute();
 const mostrarComponente = ref(false);
 watchEffect(() => {
@@ -21,7 +21,7 @@ function debeMostrarComponente(ruta) {
 const eventosAMostrar = ref([]);
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/eventos/listar-eventos');
+    const response = await axios.get(`${baseUrl}eventos/listar-eventos`);
     eventosAMostrar.value = response.data;
   } catch (error) {
     console.error('Error al obtener los eventos:', error);
@@ -85,4 +85,4 @@ onMounted(async () => {
 .link-movil {
   display: none;
 }
-</style>./components/Carousel.vue
+</style>

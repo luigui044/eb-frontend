@@ -22,11 +22,12 @@ import prox2 from '../assets/img/evento3.jpg'
 import axios from 'axios';
 
 import { ref, onMounted } from 'vue'
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const eventos = ref([])
 onMounted(async () => {
     try {
-        const response = await axios.get('http://localhost:3000/eventos/listar-eventos');
+        const response = await axios.get(`${baseUrl}eventos/listar-eventos`);
         eventos.value = response.data;
         // console.log(eventos.value.id)
     } catch (error) {
@@ -102,7 +103,7 @@ const eventosProx = ref(proxiEvents)
             <div class="grid justify-content-center mb-5 px-5">
                 <template v-for="evento in eventos">
                     <div class="col-12 lg:col-3">
-                        <img :src="'http://localhost:3000/uploads/' + evento.img_portrait" alt="" width="100%">
+                        <img :src="baseUrl + 'uploads/' + evento.img_portrait" alt="" width="100%">
                     </div>
                 </template>
 

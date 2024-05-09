@@ -6,13 +6,13 @@ import Swal from 'sweetalert2'
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const email = ref('');
 const password = ref('');
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
 const router = useRouter();
-const userData = ref(null);
 
 
 const login = async () => {
@@ -39,7 +39,7 @@ const login = async () => {
   }
 
   try {
-    const response = await axios.post('http://localhost:3000/users/signin', {
+    const response = await axios.post(`${baseUrl}users/signin`, {
       email: email.value,
       password: password.value
     });
@@ -64,7 +64,7 @@ const getUserData = async () => {
 
 
   try {
-    const response = await axios.get(`http://localhost:3000/users/get-user/${userId}`, {
+    const response = await axios.get(`${baseUrl}users/get-user/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       },

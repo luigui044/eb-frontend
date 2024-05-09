@@ -26,12 +26,7 @@ import Card from 'primevue/card';
 
                 <template #subtitle>Plazoleta Higuerón al lado de Dunkin’ Donuts, frente a Seven Seven.</template>
 
-                <!-- <template #footer>
-                    <div class="flex gap-3 mt-1">
-                        <Button label="Cancel" severity="secondary" outlined class="w-full" />
-                        <Button label="Save" class="w-full" />
-                    </div>
-                </template> -->
+
             </Card>
 
         </div>

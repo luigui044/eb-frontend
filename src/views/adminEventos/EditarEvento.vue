@@ -71,6 +71,7 @@ import axios from 'axios';
 import Dropdown from 'primevue/dropdown';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const eventId = ref(null);
 const router = useRouter();
@@ -130,7 +131,7 @@ onMounted(async () => {
         return `${horaFormateada}:${minutosFormateados} ${periodo}`;
     };
     try {
-        const response = await axios.get(`http://localhost:3000/eventos/listar-eventos/${eventId.value}`);
+        const response = await axios.get(`${baseUrl}eventos/listar-eventos/${eventId.value}`);
 
         nombreEvento.value = response.data.nombre_evento;
         estadoSeleccionado.value = response.data.estado;
@@ -142,11 +143,11 @@ onMounted(async () => {
         comentario.value = response.data.descripcion_adicional;
         lcompra.value = response.data.link_compra;
 
-        portraitUploadOld.value = `http://localhost:3000/uploads/${response.data.img_portrait}`;
-        bannerUploadOld.value = `http://localhost:3000/uploads/${response.data.img_banner}`;
+        portraitUploadOld.value = `${baseUrl}uploads/${response.data.img_portrait}`;
+        bannerUploadOld.value = `${baseUrl}uploads/${response.data.img_banner}`;
 
-        localidadUploadOld.value = `http://localhost:3000/uploads/${response.data.img_localidades}`;
-        verticalUploadOld.value = `http://localhost:3000/uploads/${response.data.img_vertical}`;
+        localidadUploadOld.value = `${baseUrl}uploads/${response.data.img_localidades}`;
+        verticalUploadOld.value = `${baseUrl}uploads/${response.data.img_vertical}`;
 
 
         // Guarda los valores originales de los campos
@@ -201,7 +202,7 @@ const editarEvento = async () => {
 
     try {
 
-        const response = await axios.patch(`http://localhost:3000/eventos/actualizar-evento/${eventId.value}`, formData, {
+        const response = await axios.patch(`${baseUrl}eventos/actualizar-evento/${eventId.value}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`,

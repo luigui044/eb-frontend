@@ -53,6 +53,7 @@ import InputText from 'primevue/inputtext';
 import IconField from 'primevue/iconfield';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const token = localStorage.getItem('token');
 const eventos = ref([]);
@@ -67,7 +68,7 @@ const filters = ref({
 
 onMounted(async () => {
     try {
-        const response = await axios.get('http://localhost:3000/eventos/listar-eventos', {
+        const response = await axios.get(`${baseUrl}eventos/listar-eventos`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

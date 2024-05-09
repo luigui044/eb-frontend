@@ -32,6 +32,7 @@
 import Button from 'primevue/button';
 import Galleria from 'primevue/galleria';
 import { ref, onMounted, defineProps } from "vue";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const props = defineProps({
     eventos: {
@@ -61,12 +62,12 @@ const formatearFecha = (fecha) => {
 };
 onMounted(() => {
     const photos = props.eventos.map(evento => ({
-        itemImageSrc: 'http://localhost:3000/uploads/' + evento.img_banner,
+        itemImageSrc: `${baseUrl}uploads/${evento.img_banner}`,
         alt: evento.nombre_evento,
         name: evento.nombre_evento,
         title: formatearFecha(evento.fecha_evento) + ' - ' + evento.ubicacion,
         caption: true,
-        url: 'http://localhost:5173/detalle-evento/' + evento.id
+        url: `${baseUrl}uploads/${evento.id}`
     }));
     images.value = photos;
 });

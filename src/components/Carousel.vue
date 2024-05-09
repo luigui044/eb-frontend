@@ -8,7 +8,7 @@ import evento2 from '../assets/img/evento2.jpeg'
 import evento3 from '../assets/img/evento3.jpg'
 import Card from 'primevue/card';
 import { ref, onMounted, defineProps } from "vue";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const products = ref([]);
 
 const props = defineProps({
@@ -30,14 +30,14 @@ onMounted(() => {
         id: evento.id,
         name: evento.ubicacion,
         description: formatearFecha(evento.fecha_evento),
-        image: 'http://localhost:3000/uploads/' + evento.img_portrait,
+        image: `${baseUrl}uploads/${evento.img_portrait}`,
         icon: 'pi pi-shopping-cart',
         category: 'Accessories',
         inventoryStatus: 'Disponible',
         title: evento.fecha_evento + ' - ' + evento.ubicacion,
         btn: 'Comprar Boleta',
         disable: true,
-        url: 'http://localhost:5173/detalle-evento/' + evento.id
+        url: `${baseUrl}uploads/${evento.id}`
     }));
     products.value = ProductService;
 });
@@ -120,11 +120,11 @@ const getSeverity = (status) => {
                     </div>
 
                     <div class="col-12 lg:col-6 px-4">
-                        <iframe width="100%" height="250"
+                        <!-- <iframe width="100%" height="250"
                             src="https://www.youtube.com/embed/Tpb5WScQIQM?si=FAQBuyck126clWe5"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <div class="img-contenedor">
                             <a href="https://visiblepublicidad.com/">
                                 <img :src="visible" width="200px" alt="" srcset="">

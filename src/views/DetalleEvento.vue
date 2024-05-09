@@ -5,6 +5,7 @@ import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const eventId = ref(null);
 const router = useRouter();
@@ -54,7 +55,7 @@ onMounted(async () => {
         return `${horaFormateada}:${minutosFormateados} ${periodo}`;
     };
     try {
-        const response = await axios.get(`http://localhost:3000/eventos/listar-eventos/${eventId.value}`);
+        const response = await axios.get(`${baseUrl}eventos/listar-eventos/${eventId.value}`);
 
         nombreEvento.value = response.data.nombre_evento;
         estadoSeleccionado.value = response.data.estado;
@@ -65,9 +66,9 @@ onMounted(async () => {
         responsable.value = response.data.responsable;
         comentario.value = response.data.descripcion_adicional;
         lcompra.value = response.data.link_compra;
-        banner.value = `http://localhost:3000/uploads/${response.data.img_banner}`;
-        localidadUpload.value = `http://localhost:3000/uploads/${response.data.img_localidades}`;
-        verticalUpload.value = `http://localhost:3000/uploads/${response.data.img_vertical}`;
+        banner.value = `${baseUrl}uploads/${response.data.img_banner}`;
+        localidadUpload.value = `${baseUrl}uploads/${response.data.img_localidades}`;
+        verticalUpload.value = `${baseUrl}uploads/${response.data.img_vertical}`;
 
 
     } catch (error) {
