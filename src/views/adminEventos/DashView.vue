@@ -1,7 +1,14 @@
 <template>
     <div class="card">
         <div class="p-mb-4">
-            <h2 class="p-m-0">Lista de Eventos</h2>
+            <div class="grid">
+                <Minimenu></Minimenu>
+                <div class="col">
+                    <h2 class="p-m-0 text-left">Lista de Eventos</h2>
+
+                </div>
+
+            </div>
         </div>
         <DataTable v-model:filters="filters" :value="eventos" :paginator="true" :rows="10"
             :rowsPerPageOptions="[5, 10, 20]" tableStyle="min-width: 50rem"
@@ -42,6 +49,7 @@
     </div>
 </template>
 <script setup>
+import Minimenu from '../../components/Minimenu.vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -55,7 +63,10 @@ import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const token = localStorage.getItem('token');
+
+
+
+
 const eventos = ref([]);
 
 const filters = ref({
@@ -67,12 +78,9 @@ const filters = ref({
 });
 
 onMounted(async () => {
+
     try {
-        const response = await axios.get(`${baseUrl}eventos/listar-eventos`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axios.get(`${baseUrl}eventos/listar-eventos`);
         eventos.value = response.data;
     } catch (error) {
         console.error('Error al obtener los eventos:', error);

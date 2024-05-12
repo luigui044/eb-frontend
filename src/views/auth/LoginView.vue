@@ -13,9 +13,15 @@ const password = ref('');
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
 const router = useRouter();
+const loading = ref(false);
 
 
 const login = async () => {
+
+  loading.value = true;
+
+
+
   if (!validateEmail(email.value)) {
 
     Swal.fire({
@@ -47,6 +53,7 @@ const login = async () => {
     let uId = response.data.userId;
     localStorage.setItem('token', access_token);
     localStorage.setItem('userId', uId);
+    router.push({ name: 'dashboard' });
 
 
   } catch (error) {
@@ -56,6 +63,7 @@ const login = async () => {
       icon: 'error',
       confirmButtonText: 'Aceptar'
     })
+    loading.value = false;
 
   }
 };
@@ -84,7 +92,7 @@ if (token) {
 
 // Redireccionar si existe un token y el usuario está en la página de inicio de sesión
 if (token && router.currentRoute.value.name === 'login') {
-  // router.push({ name: 'dashboard' });
+  router.push({ name: 'dashboard' });
 }
 
 
@@ -124,7 +132,7 @@ const validatePassword = (password) => {
             <InputText id="password1" v-model="password" type="password" class="w-full mb-3" />
 
 
-            <Button label="Sign In" type="submit" icon="pi pi-user" class="w-full"></Button>
+            <Button label="Sign In" type="submit" icon="pi pi-user" class="w-full" :loading="loading" />
           </form>
         </div>
       </div>

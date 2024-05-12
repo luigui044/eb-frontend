@@ -7,9 +7,11 @@ import Sidebar from './components/Sidebar.vue'
 import Galeria from './components/Galeria.vue'
 import Button from 'primevue/button'
 import Footer from '@/components/Footer.vue'
+const route = useRoute();
+
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const route = useRoute();
 const mostrarComponente = ref(false);
 watchEffect(() => {
   mostrarComponente.value = debeMostrarComponente(route.path);
@@ -28,6 +30,8 @@ onMounted(async () => {
   }
 });
 
+
+
 </script>
 
 <template>
@@ -35,6 +39,8 @@ onMounted(async () => {
   <header>
 
     <Navbar v-if="!mostrarComponente" />
+
+
     <Galeria v-if="$route.name === 'home' && eventosAMostrar.length" :eventos="eventosAMostrar" />
     <div class="w-100 text-center row">
       <div class="col-12 ">
