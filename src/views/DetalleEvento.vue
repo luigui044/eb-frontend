@@ -1,6 +1,5 @@
 <script setup>
 import imgPoliticas from '../assets/politicasEB.jpg'
-import imgLocalidades from '../assets/localidades.jpeg'
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';

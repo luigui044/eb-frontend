@@ -15,7 +15,8 @@
                         <h2 class="text-white"><u>{{ slotProps.item.title }}</u></h2>
                     </div>
                     <div class="col-12">
-                        <a :href="slotProps.item.url">
+                        <h1 v-if="slotProps.item.estado === 'Próximamente'">{{ slotProps.item.estado }} </h1>
+                        <a :href="slotProps.item.url" v-if="slotProps.item.estado === 'Disponible'">
                             <Button label="Comprar Boleta" class="btn-boleta" icon="pi pi-ticket" raised size="large" />
                         </a>
                     </div>
@@ -31,7 +32,7 @@
 <script setup>
 import Button from 'primevue/button';
 import Galleria from 'primevue/galleria';
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const props = defineProps({
@@ -60,11 +61,22 @@ const formatearFecha = (fecha) => {
     const mes = meses[mesIndex];
     return `${dia} de ${mes}`;
 };
+
+const estado = (idEstado) => {
+    if (idEstado === 1) {
+        return 'Disponible'
+
+    }
+    else {
+        return 'Próximamente'
+    }
+}
 onMounted(() => {
-    const photos = props.eventos.map(evento => ({
+    const photos = props.eventos.filter(evento => evento.estado === 1 || evento.estado === 4).map(evento => ({
         itemImageSrc: `${baseUrl}uploads/${evento.img_banner}`,
         alt: evento.nombre_evento,
         name: evento.nombre_evento,
+        estado: estado(evento.estado),
         title: formatearFecha(evento.fecha_evento) + ' - ' + evento.ubicacion,
         caption: true,
         url: `${baseUrl}uploads/${evento.id}`

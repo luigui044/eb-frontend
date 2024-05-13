@@ -25,15 +25,25 @@ const formatearFecha = (fecha) => {
     const mes = meses[mesIndex];
     return `${dia} de ${mes}`;
 };
+const estado = (idEstado) => {
+    if (idEstado === 1) {
+        return 'Disponible'
+
+    }
+    else {
+        return 'Próximamente'
+    }
+}
+
 onMounted(() => {
-    const ProductService = props.eventos.map(evento => ({
+    const ProductService = props.eventos.filter(evento => evento.estado === 1 || evento.estado === 4).map(evento => ({
         id: evento.id,
         name: evento.ubicacion,
         description: formatearFecha(evento.fecha_evento),
         image: `${baseUrl}uploads/${evento.img_portrait}`,
         icon: 'pi pi-shopping-cart',
         category: 'Accessories',
-        inventoryStatus: 'Disponible',
+        estado: estado(evento.estado),
         title: evento.fecha_evento + ' - ' + evento.ubicacion,
         btn: 'Comprar Boleta',
         disable: true,
@@ -45,21 +55,7 @@ onMounted(() => {
 
 
 
-const getSeverity = (status) => {
-    switch (status) {
-        case 'Disponible':
-            return 'success';
 
-        case 'LOWSTOCK':
-            return 'warning';
-
-        case 'Próximamente':
-            return 'danger';
-
-        default:
-            return null;
-    }
-};
 
 </script>
 <style>
@@ -93,9 +89,12 @@ const getSeverity = (status) => {
                     <template #footer>
                         <div class="flex gap-3 mt-1">
                             <!-- <Button label="Cancel" severity="secondary" outlined class="w-full" /> -->
-                            <a :href="product.url" class="w-full">
+                            <Button v-if="product.estado === 'Próximamente'" :label="product.estado" class="w-full"
+                                severity="warning" disabled />
+                            <a :href="product.url" class="w-full" v-if="product.estado === 'Disponible'">
                                 <Button :icon="product.icon" label="Comprar boleta" class="w-full" severity="success" />
                             </a>
+
                         </div>
                     </template>
                 </Card>
@@ -120,11 +119,11 @@ const getSeverity = (status) => {
                     </div>
 
                     <div class="col-12 lg:col-6 px-4">
-                        <!-- <iframe width="100%" height="250"
+                        <iframe width="100%" height="250"
                             src="https://www.youtube.com/embed/Tpb5WScQIQM?si=FAQBuyck126clWe5"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         <div class="img-contenedor">
                             <a href="https://visiblepublicidad.com/">
                                 <img :src="visible" width="200px" alt="" srcset="">

@@ -8,6 +8,8 @@ import DashViewVue from '@/views/adminEventos/DashView.vue';
 import CrearEvento from '@/views/adminEventos/CrearEvento.vue';
 import EditarEvento from '@/views/adminEventos/EditarEvento.vue';
 import DetalleEvento from '@/views/DetalleEvento.vue';
+import CrearUsuario from '@/views/auth/CreateUsers.vue';
+import EditarUsuario from '@/views/auth/EditarUsuario.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,9 +39,11 @@ const router = createRouter({
       name: 'detalle',
       component: DetalleEvento
     },
+
     {
       path: '/admin',
       children: [
+
         {
           path: 'login',
           name: 'login',
@@ -68,16 +72,27 @@ const router = createRouter({
           name: 'logout',
           beforeEnter: (to, from, next) => {
             logout();
-
-
           },
+        },
+        {
+          path: 'crearUsuario',
+          name: 'crearUsuario',
+          component: CrearUsuario,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'editarUsuario/:id',
+          name: 'editarUsuario',
+          component: EditarUsuario,
+          meta: { requiresAuth: true }
         },
         {
           path: '*',
           redirect: 'dashboard'
         }
       ]
-    }
+    },
+    { path: '/admin', redirect: '/admin/dashboard' }
   ]
 });
 

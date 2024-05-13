@@ -1,8 +1,6 @@
 <template>
-    <div class=" w-full lg:w-full ">
-
+    <div class="w-full">
         <div class="grid  justify-content-center text-center">
-
             <div class="col-6 surface-card p-4 shadow-2 border-round">
                 <div class="text-center mb-5">
                     <img :src="Logo" alt="Extraboletas" width="250px">
@@ -11,41 +9,44 @@
                 </div>
 
                 <div>
-                    <form @submit.prevent="crearEvento">
+                    <form @submit.prevent="confirmarCrearEvento">
                         <div class="grid">
                             <Minimenu></Minimenu>
-                            <div class="col-6"> <label for="nombreEvento" class="block text-900 font-medium mb-2">Nombre
+                            <div class="col-6">
+                                <label for="nombreEvento" class="block text-900 font-medium mb-2">Nombre
                                     de
                                     Evento</label>
-                                <InputText v-model="nombreEvento" id="nombreEvento" type="text" class="w-full mb-3" />
+                                <InputText v-model="nombreEvento" id="nombreEvento" type="text" class="w-full mb-3"
+                                    required />
                             </div>
                             <div class="col-6">
                                 <label for="nombreResponsable"
                                     class="block text-900 font-medium mb-2">Responsable</label>
-                                <InputText v-model="responsable" id="nombreResponsable" type="text"
-                                    class="w-full mb-3" />
+                                <InputText v-model="responsable" id="nombreResponsable" type="text" class="w-full mb-3"
+                                    required />
                             </div>
                             <div class="col-6">
 
                                 <label for="ubicacion" class="block text-900 font-medium mb-2 ">Lugar de Evento</label>
-                                <InputText v-model="ubicacion" id="ubicacion" type="text" class="w-full mb-3" />
+                                <InputText v-model="ubicacion" id="ubicacion" type="text" class="w-full mb-3"
+                                    required />
                             </div>
                             <div class="col-6">
 
                                 <label for="ciudad" class="block text-900 font-medium mb-2 ">Ciudad</label>
-                                <InputText v-model="ciudad" id="ciudad" type="text" class="w-full mb-3" />
+                                <InputText v-model="ciudad" id="ciudad" type="text" class="w-full mb-3" required />
                             </div>
                             <div class="col-6">
                                 <label for="fecha" class="block text-900 font-medium mb-2">Fecha de Evento</label>
-                                <Calendar showIcon v-model="date" inputId="fecha" class="w-full mb-3" />
+                                <Calendar showIcon v-model="date" inputId="fecha" class="w-full mb-3" required />
                             </div>
                             <div class="col-6">
                                 <label for="hora" class="block text-900 font-medium mb-2">Hora</label>
-                                <Calendar id="hora" v-model="hora" timeOnly class="w-full mb-3" />
+                                <Calendar id="hora" v-model="hora" timeOnly class="w-full mb-3" required />
                             </div>
                             <div class="col-8">
                                 <label for="compra" class="block text-900 font-medium mb-2 ">Link de compra</label>
-                                <InputText v-model="lcompra" id="compra" type="text" class="w-full mb-3" />
+                                <InputText v-model="lcompra" id="compra" type="text" class="w-full mb-3" required />
                             </div>
                             <div class="col-4">
                                 <label for="estadoEvento" class="block text-900 font-medium mb-2 ">Estado de
@@ -53,7 +54,7 @@
 
                                 <Dropdown v-model="estadoSeleccionado" :options="estados" id="estadoEvento"
                                     optionLabel="name" optionValue="value" placeholder="Seleccione estado de evento"
-                                    class="w-full mb-3" />
+                                    class="w-full mb-3" required />
                             </div>
                             <div class="col-12">
                                 <label for="comentario" class="block text-900 font-medium mb-2 ">Comentario
@@ -64,12 +65,12 @@
                             <div class="col-6">
                                 <label for="imgPortrait" class="block text-900 font-medium mb-2 ">Imagen 1x1</label>
                                 <FileUpload ref="portraitUpload" name="imgPortrait[]" :showUploadButton="false"
-                                    accept="image/*" :maxFileSize="30000000" :multiple="false" class="" />
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false" required />
                             </div>
                             <div class="col-6">
                                 <label for="imgBanner" class="block text-900 font-medium mb-2 ">Imagen de banner</label>
                                 <FileUpload ref="bannerUpload" name="imgBanner[]" :showUploadButton="false"
-                                    accept="image/*" :maxFileSize="30000000" :multiple="false" class="" />
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false" required />
 
                             </div>
                             <div class="col-6">
@@ -78,7 +79,7 @@
                                     localidades</label>
 
                                 <FileUpload ref="localidadUpload" name="imgLocalidad[]" :showUploadButton="false"
-                                    accept="image/*" :maxFileSize="30000000" :multiple="false" class="" />
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false" required />
                             </div>
                             <div class="col-6">
 
@@ -86,7 +87,7 @@
                                     vertical</label>
 
                                 <FileUpload ref="verticalUpload" name="imgVertical[]" :showUploadButton="false"
-                                    accept="image/*" :maxFileSize="30000000" :multiple="false" class="" />
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false" required />
                             </div>
                         </div>
 
@@ -111,6 +112,9 @@ import Logo from '../../assets/img/logoEB.png';
 import Minimenu from '../../components/Minimenu.vue';
 import Dropdown from 'primevue/dropdown';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import Swal from 'sweetalert2';
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const token = localStorage.getItem('token');
@@ -123,6 +127,7 @@ const nombreEvento = ref();
 const ubicacion = ref();
 const comentario = ref();
 const lcompra = ref();
+const router = useRouter();
 
 const portraitUpload = ref(null);
 const bannerUpload = ref(null);
@@ -141,7 +146,7 @@ const estados = ref([
 
 const crearEvento = async () => {
 
-    console.log(estadoSeleccionado.value)
+
     const formData = new FormData();
 
     formData.append('nombre_evento', nombreEvento.value);
@@ -177,6 +182,25 @@ const crearEvento = async () => {
         console.log(response);
     } catch (error) {
         console.error('Error al crear el evento:', error);
+    }
+};
+
+const confirmarCrearEvento = async () => {
+    const confirmacion = await Swal.fire({
+        title: '¿Estás seguro de crear este evento?',
+
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '¡Sí, crearlo!',
+        cancelButtonText: 'Cancelar',
+    });
+
+    if (confirmacion.isConfirmed) {
+        crearEvento();
+        await Swal.fire('¡Evento creado!', 'El evento ha sido creado exitosamente.', 'success');
+        router.push({ name: 'dashboard' });
     }
 };
 </script>

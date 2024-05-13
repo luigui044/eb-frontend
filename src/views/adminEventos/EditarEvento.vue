@@ -1,69 +1,119 @@
 <template>
-    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
-        <div class="text-center mb-5">
-            <div class="text-900 text-3xl font-medium mb-3">Editar evento</div>
+    <div class="w-full">
+        <div class="grid justify-content-center text-center">
+            <div class="col-6 surface-card p-4 shadow-2 border-round">
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">Editar evento</div>
+                    <img :src="Logo" alt="Extraboletas" width="250px">
+
+                </div>
+                <div>
+                    <form @submit.prevent="editarEvento">
+                        <div class="grid">
+                            <Minimenu />
+                            <div class="col-6">
+                                <label for="nombreEvento" class="block text-900 font-medium mb-2">Nombre de
+                                    Evento</label>
+                                <InputText v-model="nombreEvento" id="nombreEvento" type="text" class="w-full mb-3" />
+                            </div>
+                            <div class="col-6">
+                                <label for="nombreResponsable"
+                                    class="block text-900 font-medium mb-2">Responsable</label>
+                                <InputText v-model="responsable" id="nombreResponsable" type="text"
+                                    class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-6">
+                                <label for="ubicacion" class="block text-900 font-medium mb-2 ">Lugar de Evento</label>
+                                <InputText v-model="ubicacion" id="ubicacion" type="text" class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-6">
+                                <label for="ciudad" class="block text-900 font-medium mb-2 ">Ciudad</label>
+                                <InputText v-model="ciudad" id="ciudad" type="text" class="w-full mb-3" />
+                            </div>
+                            <div class="col-6">
+                                <label for="fecha" class="block text-900 font-medium mb-2">Fecha de Evento</label>
+                                <Calendar showIcon v-model="date" inputId="fecha" class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-6">
+                                <label for="hora" class="block text-900 font-medium mb-2">Hora</label>
+                                <Calendar id="hora" v-model="hora" timeOnly class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-8">
+                                <label for="compra" class="block text-900 font-medium mb-2 ">Link de compra</label>
+                                <InputText v-model="lcompra" id="compra" type="text" class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-4">
+                                <label for="estadoEvento" class="block text-900 font-medium mb-2 ">Estado de
+                                    evento</label>
+                                <Dropdown v-model="estadoSeleccionado" :options="estados" optionLabel="name"
+                                    optionValue="value" id="estadoEvento" placeholder="Seleccione estado de evento"
+                                    class="w-full mb-3" />
+
+                            </div>
+                            <div class="col-12">
+                                <label for="comentario" class="block text-900 font-medium mb-2 ">Comentario
+                                    adicional</label>
+                                <Textarea v-model="comentario" id="comentario" aria-label="" class="w-full mb-3" />
+                            </div>
+                            <div class=" col-6 align-content-end">
+                                <label for="imgPortrait" class="block text-900 font-medium mb-2 ">Imagen 1x1</label>
+                                <img id="unoimage" :src="portraitUploadOld" alt="" width="40%">
+                                <FileUpload ref="portraitUpload" name="imgPortrait[]" :showUploadButton="false"
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false"
+                                    @change="hidePortraitImage" />
+                            </div>
+                            <div class="col-6 align-content-end">
+                                <label for="imgBanner" class="block text-900 font-medium mb-2 ">Imagen de banner</label>
+                                <img id="dosimage" :src="bannerUploadOld" alt="" width="50%">
+
+                                <FileUpload ref="bannerUpload" name="imgBanner[]" :showUploadButton="false"
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false"
+                                    @change="hideBannerImage" />
+
+                            </div>
+                            <div class="col-6 align-content-end">
+                                <label for="imgLocalidad" class="block text-900 font-medium mb-2 ">Imagen de
+                                    localidades</label>
+                                <img id="tresimage" :src="localidadUploadOld" alt="" width="50%">
+
+                                <FileUpload ref="localidadUpload" name="imgLocalidad[]" :showUploadButton="false"
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false"
+                                    @change="hideLocalidadImage" />
+                            </div>
+                            <div class="col-6 align-content-end">
+                                <label for="imgVertical" class="block text-900 font-medium mb-2 ">Imagen
+                                    vertical</label>
+                                <img id="cuatroimage" :src="verticalUploadOld" alt="" width="20%">
+                                <FileUpload ref="verticalUpload" name="imgVertical[]" :showUploadButton="false"
+                                    accept="image/*" :maxFileSize="30000000" :multiple="false"
+                                    @change="hideVerticalImage" />
+
+
+                            </div>
+                        </div>
+                        <Button label="Actualizar Evento" icon="pi pi-cloud-upload" class="w-full mt-3"
+                            type="submit"></Button>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <form @submit.prevent="editarEvento">
-                <label for="nombreEvento" class="block text-900 font-medium mb-2">Nombre de Evento</label>
-                <InputText v-model="nombreEvento" id="nombreEvento" type="text" class="w-full mb-3" />
 
-                <label for="nombreResponsable" class="block text-900 font-medium mb-2">Responsable</label>
-                <InputText v-model="responsable" id="nombreResponsable" type="text" class="w-full mb-3" />
-
-                <label for="ubicacion" class="block text-900 font-medium mb-2 ">Lugar de Evento</label>
-                <InputText v-model="ubicacion" id="ubicacion" type="text" class="w-full mb-3" />
-
-                <label for="ciudad" class="block text-900 font-medium mb-2 ">Ciudad</label>
-                <InputText v-model="ciudad" id="ciudad" type="text" class="w-full mb-3" />
-
-                <label for="fecha" class="block text-900 font-medium mb-2">Fecha de Evento</label>
-                <Calendar showIcon v-model="date" inputId="fecha" class="w-full mb-3" />
-
-                <label for="hora" class="block text-900 font-medium mb-2">Hora</label>
-                <Calendar id="hora" v-model="hora" timeOnly class="w-full mb-3" />
-
-
-                <label for="compra" class="block text-900 font-medium mb-2 ">Link de compra</label>
-                <InputText v-model="lcompra" id="compra" type="text" class="w-full mb-3" />
-
-                <Dropdown v-model="estadoSeleccionado" :options="estados" optionLabel="name" optionValue="value"
-                    placeholder="Seleccione estado de evento" class="w-full mb-3" />
-                <Textarea v-model="comentario" id="comentario" aria-label="" class="w-full mb-3" />
-
-                <label for="imgPortrait" class="block text-900 font-medium mb-2 ">Imagen 1x1</label>
-                <img id="unoimage" :src="portraitUploadOld" alt="" width="40%">
-                <FileUpload ref="portraitUpload" name="imgPortrait[]" :showUploadButton="false" accept="image/*"
-                    :maxFileSize="30000000" :multiple="false" class="" @change="hidePortraitImage" />
-                <label for="imgBanner" class="block text-900 font-medium mb-2 ">Imagen de banner</label>
-                <img id="dosimage" :src="bannerUploadOld" alt="" width="50%">
-
-                <FileUpload ref="bannerUpload" name="imgBanner[]" :showUploadButton="false" accept="image/*"
-                    :maxFileSize="30000000" :multiple="false" class="" @change="hideBannerImage" />
-
-
-                <label for="imgLocalidad" class="block text-900 font-medium mb-2 ">Imagen de localidades</label>
-                <img id="tresimage" :src="localidadUploadOld" alt="" width="50%">
-
-                <FileUpload ref="localidadUpload" name="imgLocalidad[]" :showUploadButton="false" accept="image/*"
-                    :maxFileSize="30000000" :multiple="false" class="" @change="hideLocalidadImage" />
-
-                <label for="imgVertical" class="block text-900 font-medium mb-2 ">Imagen vertical</label>
-                <img id="cuatroimage" :src="verticalUploadOld" alt="" width="20%">
-                <FileUpload ref="verticalUpload" name="imgVertical[]" :showUploadButton="false" accept="image/*"
-                    :maxFileSize="30000000" :multiple="false" class="" @change="hideVerticalImage" />
-
-
-                <Button label="Actualizar Evento" icon="pi pi-cloud-upload" class="w-full mt-3" type="submit"></Button>
-            </form>
-        </div>
     </div>
 </template>
 
 <script setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import Minimenu from '../../components/Minimenu.vue';
+import Logo from '../../assets/img/logoEB.png';
+import Swal from 'sweetalert2';
+
 import Calendar from 'primevue/calendar';
 import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
@@ -173,12 +223,56 @@ const estados = ref([
     { name: 'Borrador', value: 2 },
     { name: 'Deshabilitado', value: 3 },
 ]);
+const showAlert = (mensaje) => {
+    Swal.fire({
+        title: mensaje,
+        icon: 'warning',
+        confirmButtonText: 'Aceptar'
+    });
+};
+const showSuccessMessage = () => {
+    Swal.fire({
+        title: '¡Cambios actualizados!',
+        text: 'Los cambios se han actualizado correctamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+    }).then(() => {
+        // Redireccionar al dashboard
+        router.push({ name: 'dashboard' });
+    });
+};
+
 
 const editarEvento = async () => {
 
     const formData = new FormData();
+    const cambiosRealizados =
+        nombreEvento.value !== originalValues.nombreEvento ||
+        responsable.value !== originalValues.responsable ||
+        ubicacion.value !== originalValues.ubicacion ||
+        ciudad.value !== originalValues.ciudad ||
+        lcompra.value !== originalValues.lcompra ||
+        date.value !== originalValues.date ||
+        hora.value !== originalValues.hora ||
+        estadoSeleccionado.value !== originalValues.estadoSeleccionado ||
+        (portraitUpload.value && portraitUpload.value.files[0]) ||
+        (bannerUpload.value && bannerUpload.value.files[0]) ||
+        (localidadUpload.value && localidadUpload.value.files[0]) ||
+        (verticalUpload.value && verticalUpload.value.files[0]);
 
-    // Agregar los campos al formData solo si han cambiado
+    if (cambiosRealizados) {
+        if (!nombreEvento.value || !ubicacion.value || !ciudad.value || !lcompra.value || !estadoSeleccionado.value) {
+            showAlert('Por favor completa todos los campos obligatorios.');
+            return;
+        }
+    }
+
+    if (!cambiosRealizados) {
+        showAlert('No has realizado ningún cambio.');
+        return;
+    }
+
+
     if (nombreEvento.value !== originalValues.nombreEvento) formData.append('nombre_evento', nombreEvento.value);
     if (responsable.value !== originalValues.responsable) formData.append('responsable', responsable.value);
     if (ubicacion.value !== originalValues.ubicacion) formData.append('ubicacion', ubicacion.value);
@@ -209,9 +303,14 @@ const editarEvento = async () => {
             },
         });
 
-        console.log(response);
+        showSuccessMessage();
     } catch (error) {
-        console.error('Error al crear el evento:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al actualizar los cambios.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
     }
 };
 

@@ -9,10 +9,14 @@
         <router-link :to="{ name: 'crearEvento' }">
 
 
-            <Button icon="pi pi-calendar-plus" v-if="$route.name !== 'crearEvento'" label="Crear Nuevo Evento"
-                class="float-right" severity="info"></Button>
+            <Button icon="pi pi-calendar-plus" v-if="$route.name === 'dashboard'" label="Crear Nuevo Evento"
+                class="float-right mr-2" severity="info"></Button>
         </router-link>
 
+        <RouterLink :to="{ name: 'crearUsuario' }">
+            <Button icon="pi pi-user" v-if="$route.name === 'dashboard'" label="Crear Usuario" class="float-right"
+                severity="primary"></Button>
+        </RouterLink>
     </div>
     <div class="col-3  text-right ">
         <router-link :to="{ name: 'logout' }">

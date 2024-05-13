@@ -1,6 +1,5 @@
 <script setup>
 import Carousel from "../components/Carousel.vue";
-// import 'https://static.elfsight.com/platform/platform.js';
 import Button from 'primevue/button';
 import axios from 'axios';
 import { ref, onMounted } from 'vue'
@@ -53,15 +52,15 @@ onMounted(async () => {
             <h2>Como comprar tu boleta</h2>
           </div>
           <div class="card-body">
-            <!-- <iframe
+            <iframe
               src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1328548425205069%2F&show_text=false&width=267&t=0"
               width="267" height="476" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
               allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              allowFullScreen="true"></iframe> -->
+              allowFullScreen="true"></iframe>
             <br>
             <br>
-            <!-- <a href="https://sistema.extraboletas.com/perfil.html?tab_seleccionado=mis-compras">
-              <Button label="Comprar Boleta" class="btn-boleta2" icon="pi pi-ticket" raised size="large" /></a> -->
+            <a href="https://sistema.extraboletas.com/perfil.html?tab_seleccionado=mis-compras">
+              <Button label="Comprar Boleta" class="btn-boleta2" icon="pi pi-ticket" raised size="large" /></a>
 
           </div>
 

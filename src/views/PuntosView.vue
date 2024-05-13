@@ -1,5 +1,4 @@
 <script setup>
-import Button from 'primevue/button';
 import Estadio from '../assets/img/estadio.jpg'
 import Unicentro from '../assets/img/unicentro.png'
 
