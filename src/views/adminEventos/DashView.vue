@@ -43,8 +43,11 @@
                             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                                 v-tooltip="{ value: 'Editar evento' }" />
                         </router-link>
-                        <!-- <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click=""
-                            v-tooltip="{ value: 'Deshabilitar evento' }" /> -->
+
+
+                        <Button v-if="getState(index) !== 3" icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                            @click="editarEvento(getId(index), 3, index)"
+                            v-tooltip="{ value: 'Deshabilitar evento' }" />
 
                     </div>
                 </template>
@@ -75,6 +78,17 @@
             <Column field="name" header="Nombre de usuario"></Column>
             <Column field="email" header="Correo"></Column>
             <Column field="cedula" header="Cédula"> </Column>
+            <Column field="rol" header="Rol">
+
+                <template #body="{ index }">
+                    {{ getRol(index) }}
+                </template>
+            </Column>
+            <Column field="estado" header="Estado de evento">
+                <template #body="{ index }">
+                    <Tag :severity="getUserTagSeverity(index)" :value="getUserTagText(index)" />
+                </template>
+            </Column>
             <Column header="Acciones">
                 <template #body="{ index }">
                     <div>
@@ -82,6 +96,9 @@
                             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                                 v-tooltip="{ value: 'Editar usuario' }" />
                         </router-link>
+                        <Button v-if="getUserState(index) !== 2" icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger" @click="editUsuario(getUserId(index), 2, index)"
+                            v-tooltip="{ value: 'Deshabilitar evento' }" />
 
                     </div>
                 </template>
@@ -93,6 +110,7 @@
 </template>
 <script setup>
 import Minimenu from '../../components/Minimenu.vue';
+import Swal from 'sweetalert2';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -104,8 +122,11 @@ import InputText from 'primevue/inputtext';
 import IconField from 'primevue/iconfield';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const token = localStorage.getItem('token');
+
+
 const eventos = ref([]);
 const users = ref([])
 
@@ -124,6 +145,8 @@ const userFilters = ref({
     cedula: { value: null, matchMode: FilterMatchMode.CONTAINS },
 
 });
+
+
 
 
 const formatDate = (index) => {
@@ -162,6 +185,22 @@ const getId = (index) => {
     return eventos.value[index].id;
 };
 
+const getUserId = (index) => {
+    // Usa el índice como ID o calcula el ID de alguna manera
+    return users.value[index].id;
+};
+
+
+const getState = (index) => {
+    // Usa el índice como ID o calcula el ID de alguna manera
+    return eventos.value[index].estado;
+};
+
+const getUserState = (index) => {
+    // Usa el índice como ID o calcula el ID de alguna manera
+    return users.value[index].estado;
+};
+
 const getIdUser = (index) => {
     // Usa el índice como ID o calcula el ID de alguna manera
     return users.value[index].id;
@@ -182,6 +221,19 @@ const getTagSeverity = (index) => {
     }
 };
 
+const getUserTagSeverity = (index) => {
+    const estado = users.value[index].estado;
+    switch (estado) {
+        case 1:
+            return 'success';
+        case 2:
+            return 'danger';
+
+        default:
+            return 'info';
+    }
+};
+
 const getTagText = (index) => {
     const estado = eventos.value[index].estado;
     switch (estado) {
@@ -197,4 +249,144 @@ const getTagText = (index) => {
             return 'Desconocido';
     }
 };
+
+const getUserTagText = (index) => {
+    const estado = users.value[index].estado;
+    switch (estado) {
+        case 1:
+            return 'Habilitado';
+        case 2:
+            return 'Deshabilitado';
+
+    }
+};
+
+const getRol = (index) => {
+    const estado = users.value[index].estado;
+    switch (estado) {
+        case 1:
+            return 'Administrador';
+        case 2:
+            return 'Editor';
+
+    }
+}
+
+const editUsuario = async (userId, estado, index) => {
+    const formData = new FormData();
+    formData.append('estado', estado);
+
+    const confirmacion = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Estás a punto de deshabilitar al usuario. ¿Estás seguro de que quieres continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, deshabilitar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (confirmacion.isConfirmed) {
+
+        if (parseInt(userId) === parseInt(localStorage.getItem('userId'))) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Accion no permitida',
+                text: 'No se puede deshabilitar el usuario con que esta logueado',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${baseUrl}users/update-user/${userId}`, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 201) {
+                // Actualiza el estado del usuario en la lista local de usuarios
+                users.value[index].estado = estado;
+
+                // Si el estado es 2 (Deshabilitado), cambia el tagSeverity y el tagText
+                if (estado === 2) {
+                    users.value[index].tagSeverity = 'danger';
+                    users.value[index].tagText = 'Deshabilitado';
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuario actualizado',
+                    text: 'El usuario ha sido deshabilitado correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    router.push({ name: 'dashboard' });
+                }, 1500);
+            } else {
+                throw new Error('Error al actualizar usuario');
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al actualizar usuario',
+                text: 'No se pudo deshabilitar el usuario',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }
+};
+
+
+const editarEvento = async (eventoId, estado, index) => {
+    const confirmacion = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Estás a punto de desactivar el evento. ¿Estás seguro de que quieres continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, desactivar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (confirmacion.isConfirmed) {
+        const formData = new FormData();
+        formData.append('estado', estado);
+
+        try {
+            const response = await axios.patch(`${baseUrl}eventos/actualizar-evento/${eventoId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                // Actualiza el estado del evento en la lista local de eventos
+                eventos.value[index].estado = estado;
+
+                // Si el estado es 3 (Deshabilitado), cambia el tagSeverity y el tagText
+                if (estado === 3) {
+                    eventos.value[index].tagSeverity = 'danger';
+                    eventos.value[index].tagText = 'Deshabilitado';
+                }
+
+                showSuccessMessage();
+            } else {
+                throw new Error('Error en la solicitud');
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al actualizar los cambios.' + error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    }
+};
+
 </script>

@@ -54,11 +54,9 @@
 
     </div>
 </template>
-
 <script setup>
 import Minimenu from '../../components/Minimenu.vue';
 import Logo from '../../assets/img/logoEB.png';
-import InputMask from 'primevue/inputmask';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { useRouter } from 'vue-router';
@@ -78,10 +76,9 @@ const cedula = ref();
 const rolSeleccionado = ref();
 const isValidEmail = ref(true);
 const emailFeedback = ref('');
+const originalValues = ref({}); // Objeto para almacenar los valores originales del usuario
 
 const roles = [{ name: 'Administrador', value: 1 }, { name: 'Editor', value: 2 }]
-
-
 
 const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,72 +89,91 @@ const validateEmail = () => {
 onMounted(async () => {
     userId.value = parseInt(router.currentRoute.value.params.id);
     try {
-        const response = await axios.get(`${baseUrl}users/get-user/${userId.value}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+        const response = await axios.get(`${baseUrl}users/get-user/${userId.value}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        );
-        console.log(response.data)
+        });
+
         name.value = response.data.name;
         email.value = response.data.email;
         cedula.value = response.data.cedula;
         rolSeleccionado.value = response.data.rol;
+
+        // Almacena los valores originales del usuario
+        originalValues.value = {
+            name: response.data.name,
+            email: response.data.email,
+            cedula: response.data.cedula,
+            rol: response.data.rol
+        };
     } catch (error) {
         console.log(error)
     }
 })
 
 const actualizarUsuario = async () => {
-
-
     const formData = new FormData();
 
+    // Compara los valores actuales con los originales para determinar qué campos han cambiado
+    const dataToUpdate = {};
+    if (name.value !== originalValues.value.name) {
+        dataToUpdate.name = name.value;
+    }
+    if (email.value !== originalValues.value.email) {
+        dataToUpdate.email = email.value;
+    }
+    if (password.value) {
+        dataToUpdate.password = password.value;
+    }
+    if (rolSeleccionado.value !== originalValues.value.rol) {
+        dataToUpdate.rol = rolSeleccionado.value;
+    }
+    if (cedula.value !== originalValues.value.cedula) {
+        dataToUpdate.cedula = cedula.value;
+    }
 
-    formData.append('name', name.value);
-    formData.append('email', email.value);
-    formData.append('password', password.value);
-    formData.append('rol', rolSeleccionado.value);
-    formData.append('cedula', cedula.value);
+    // Agrega al formData solo los campos que han sido modificados
+    Object.entries(dataToUpdate).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
 
     try {
-        const response = await axios.post(`${baseUrl}users/update-user/${userId}`, formData, {
+        const response = await axios.post(`${baseUrl}users/update-user/${userId.value}`, formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
+
         if (response.status === 201) {
             Swal.fire({
                 icon: 'success',
-                title: 'Usuario creado',
+                title: 'Usuario actualizado',
                 text: 'El usuario ha sido actualizado correctamente',
                 showConfirmButton: false,
                 timer: 1500
             });
             setTimeout(() => {
                 router.push({ name: 'dashboard' });
-
             }, 1500);
-        }
-        else {
+        } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Error al crear usuario',
-                text: 'No se pudo crear el usuario',
+                title: 'Error al actualizar usuario' + response.status,
+                text: 'No se pudo actualizar el usuario',
                 showConfirmButton: false,
                 timer: 1500
             });
-            setTimeout(() => {
-                router.push({ name: 'dashboard' });
-
-            }, 1500);
         }
-    }
-    catch (error) {
-        console.log(error);
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar usuario',
+            text: 'No se pudo actualizar el usuario',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 }
-
 </script>

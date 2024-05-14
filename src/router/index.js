@@ -10,7 +10,7 @@ import EditarEvento from '@/views/adminEventos/EditarEvento.vue';
 import DetalleEvento from '@/views/DetalleEvento.vue';
 import CrearUsuario from '@/views/auth/CreateUsers.vue';
 import EditarUsuario from '@/views/auth/EditarUsuario.vue';
-
+import UpdatePass from '@/views/auth/UpdatePass.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -84,6 +84,13 @@ const router = createRouter({
           path: 'editarUsuario/:id',
           name: 'editarUsuario',
           component: EditarUsuario,
+          meta: { requiresAuth: true }
+        },
+
+        {
+          path: 'cambiarPassword',
+          name: 'cambiarPassword',
+          component: UpdatePass,
           meta: { requiresAuth: true }
         },
         {

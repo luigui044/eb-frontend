@@ -14,9 +14,17 @@
         </router-link>
 
         <RouterLink :to="{ name: 'crearUsuario' }">
-            <Button icon="pi pi-user" v-if="$route.name === 'dashboard'" label="Crear Usuario" class="float-right"
+            <Button icon="pi pi-user" v-if="$route.name === 'dashboard'" label="Crear Usuario" class="float-right mr-2"
                 severity="primary"></Button>
         </RouterLink>
+
+        <RouterLink :to="{ name: 'cambiarPassword' }">
+            <Button Button icon=" pi pi-key" v-if="$route.name === 'dashboard'" label="Cambiar contraseña"
+                class="float-right" severity="primary"></Button>
+        </RouterLink>
+
+
+
     </div>
     <div class="col-3  text-right ">
         <router-link :to="{ name: 'logout' }">
