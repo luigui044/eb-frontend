@@ -16,9 +16,12 @@
                     </div>
                     <div class="col-12">
                         <h1 v-if="slotProps.item.estado === 'Próximamente'">{{ slotProps.item.estado }} </h1>
-                        <a :href="slotProps.item.url" v-if="slotProps.item.estado === 'Disponible'">
+                        <!-- <a :href="slotProps.item.url" v-if="slotProps.item.estado === 'Disponible'"> -->
+                        <RouterLink :to="{ name: 'detalle', params: { id: slotProps.item.id } }"
+                            v-if="slotProps.item.estado === 'Disponible'">
                             <Button label="Comprar Boleta" class="btn-boleta" icon="pi pi-ticket" raised size="large" />
-                        </a>
+                        </RouterLink>
+                        <!-- </a> -->
                     </div>
                 </div>
                 <div v-else>
@@ -73,13 +76,14 @@ const estado = (idEstado) => {
 }
 onMounted(() => {
     const photos = props.eventos.filter(evento => evento.estado === 1 || evento.estado === 4).map(evento => ({
+        id: evento.id,
         itemImageSrc: `${baseUrl}uploads/${evento.img_banner}`,
         alt: evento.nombre_evento,
         name: evento.nombre_evento,
         estado: estado(evento.estado),
         title: formatearFecha(evento.fecha_evento) + ' - ' + evento.ubicacion,
         caption: true,
-        url: `${baseUrl}uploads/${evento.id}`
+        url: `${baseUrl}detalle-evento/${evento.id}`
     }));
     images.value = photos;
 });

@@ -125,8 +125,6 @@ import Tag from 'primevue/tag';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const token = localStorage.getItem('token');
-
-
 const eventos = ref([]);
 const users = ref([])
 
@@ -145,6 +143,7 @@ const userFilters = ref({
     cedula: { value: null, matchMode: FilterMatchMode.CONTAINS },
 
 });
+
 
 
 

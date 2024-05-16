@@ -7,7 +7,7 @@ import visible from '../assets/img/visible.png'
 import evento2 from '../assets/img/evento2.jpeg'
 import evento3 from '../assets/img/evento3.jpg'
 import Card from 'primevue/card';
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const products = ref([]);
 
@@ -47,7 +47,7 @@ onMounted(() => {
         title: evento.fecha_evento + ' - ' + evento.ubicacion,
         btn: 'Comprar Boleta',
         disable: true,
-        url: `${baseUrl}uploads/${evento.id}`
+        // url: `${baseUrl}detalle-evento/${evento.id}`
     }));
     products.value = ProductService;
 });
@@ -91,9 +91,12 @@ onMounted(() => {
                             <!-- <Button label="Cancel" severity="secondary" outlined class="w-full" /> -->
                             <Button v-if="product.estado === 'Próximamente'" :label="product.estado" class="w-full"
                                 severity="warning" disabled />
-                            <a :href="product.url" class="w-full" v-if="product.estado === 'Disponible'">
+                            <!-- <a :href="product.url" class="w-full" v-if="product.estado === 'Disponible'"> -->
+                            <RouterLink :to="{ name: 'detalle', params: { id: product.id } }"
+                                v-if="product.estado === 'Disponible'">
                                 <Button :icon="product.icon" label="Comprar boleta" class="w-full" severity="success" />
-                            </a>
+                            </RouterLink>
+                            <!-- </a> -->
 
                         </div>
                     </template>
